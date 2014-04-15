@@ -13,13 +13,13 @@ with open(fname) as f:
     content = f.readlines()
 
 for item in content:
-	request = 'https://api.todoist.com/API/addItem?content=' + item + '&token=' + token
-	if project_id:
-		request += '&project_id=' + project_id
-	if priority:
-		request += '&priority=' + priority
-	if indent:
-		request += '&indent=' + indent
-	if date_string:
-		request += '&date_string' + date_string
-	r = requests.get(request)
+    request = 'https://api.todoist.com/API/addItem?content=' + item + '&token=' + token
+    if project_id:
+        request += '&project_id=' + project_id
+    if priority:
+        request += '&priority=' + priority
+    if indent:
+        request += '&indent=' + indent
+    if date_string:
+        request += '&date_string' + date_string
+    r = requests.get(request)
