@@ -20,13 +20,24 @@ for inbox_item in inbox_items:
         if inbox_item['content'].startswith(prefix):
             try:
                 date_string = inbox_item['date_string']
-                date_string = date_string.split(' ')[1:-2]
-                arw = arrow.get(datetime.strptime(date_string, '%a %d %b %Y'), tz.gettz('US/Pacific'))
+                print inbox_item['due_date_utc']
+                date_string = date_string.split(' ')
+                if len(date_string) is 4:
+                    date_string = date_string[:2]
+                    year = arrow.now().year
+                    date_string = '%s %s %s' % (date_string[1], date_string[0], year)
+                else:
+                    date_string = date_string[1:-2]
+                    date_string = ' '.join(date_string)
+                print date_string
+                arw = arrow.get(datetime.strptime(date_string, '%d %b %Y'), tz.gettz('US/Pacific'))
                 arw = arw.replace(hour=hour, minute=minute)
                 date_string = arw.format('MM/DD/YYYY @ HH:mm')
+                due_date_utc = arw.to('utc').format('YYYY-MM-DDTHH:mm')
+                print due_date_utc
                 
-                item = api.items.get_by_id(inbox_item['id'])
-                item.update(date_string=date_string)
-                api.commit()
+                # item = api.items.get_by_id(inbox_item['id'])
+                # item.update(date_string=date_string, due_date_utc=due_date_utc)
+                # api.commit()
             except:
                 print 'Failed on "%s"' % inbox_item['content']
