@@ -1,5 +1,4 @@
-# python
-*.pyc
+secrets.py
 *Credentials.py
 tasks.txt
 *.txt
