@@ -42,12 +42,19 @@ for inbox_item in inbox_items:
                 date_string = arw.format('MM/DD/YYYY @ HH:mm')
                 due_date_utc = arw.to('utc').format('YYYY-MM-DDTHH:mm')
                 
-                # item = api.items.get_by_id(inbox_item['id'])
-                # item.update(date_string=date_string, due_date_utc=due_date_utc)
-                # api.commit()
-
-                print inbox_item['content']
+                item = api.items.get_by_id(inbox_item['id'])
+                item.update(date_string=date_string, due_date_utc=due_date_utc)
             except:
                 failed += 1
                 print 'Failed on "%s"' % inbox_item['content']
+
+        for rule in RULES["project_by_prefix"]:
+            prefix = rule[0]
+            project_id = rule[1]
+            if inbox_item['content'].startswith(prefix):
+                item = api.items.get_by_id(inbox_item['id'])
+                item.move(project_id)
+
+api.commit()
+
 print 'Failed on %s/%s' % (failed, attempts)
