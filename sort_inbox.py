@@ -1,8 +1,9 @@
-import arrow
 from datetime import datetime
 from dateutil import tz
+import arrow
 import requests
 import todoist
+
 from secrets import TODOIST_TOKEN, INBOX_PROJECT_ID, RULES
 
 api = todoist.TodoistAPI(TODOIST_TOKEN)
