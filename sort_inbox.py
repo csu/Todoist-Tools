@@ -1,6 +1,6 @@
+import arrow
 from datetime import datetime
 from dateutil import tz
-import arrow
 import requests
 import todoist
 
