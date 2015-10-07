@@ -12,15 +12,12 @@ request_url = 'https://api.todoist.com/API/getUncompletedItems?project_id=' + IN
 request_url += '&token=' + TODOIST_TOKEN
 inbox_items = requests.get(request_url).json()
 
-failed = 0
-attempts = 0
 for inbox_item in inbox_items:
     for rule in RULES["due_time_by_prefix"]:
         prefix = rule[0]
         hour = rule[1]
         minute = rule[2]
         if inbox_item['content'].startswith(prefix):
-            attempts += 1
             try:
                 date_string = inbox_item['date_string']
                 date_string = date_string.split(' ')
@@ -45,16 +42,13 @@ for inbox_item in inbox_items:
                 item = api.items.get_by_id(inbox_item['id'])
                 item.update(date_string=date_string, due_date_utc=due_date_utc)
             except:
-                failed += 1
                 print 'Failed on "%s"' % inbox_item['content']
 
-        for rule in RULES["project_by_prefix"]:
-            prefix = rule[0]
-            project_id = rule[1]
-            if inbox_item['content'].startswith(prefix):
-                item = api.items.get_by_id(inbox_item['id'])
-                item.move(project_id)
+    for rule in RULES["project_by_prefix"]:
+        prefix = rule[0]
+        project_id = rule[1]
+        if inbox_item['content'].startswith(prefix):
+            item = api.items.get_by_id(inbox_item['id'])
+            item.move(project_id)
 
 api.commit()
-
-print 'Failed on %s/%s' % (failed, attempts)
