@@ -51,4 +51,11 @@ for inbox_item in inbox_items:
             item = api.items.get_by_id(inbox_item['id'])
             item.move(project_id)
 
+    for rule in RULES["project_by_substring"]:
+        prefix = rule[0]
+        project_id = rule[1]
+        if prefix in inbox_item['content']:
+            item = api.items.get_by_id(inbox_item['id'])
+            item.move(project_id)
+
 api.commit()
