@@ -1,7 +1,9 @@
-import arrow
 from datetime import datetime
 from dateutil import tz
+
+import arrow
 import requests
+from titlecase import titlecase
 import todoist
 
 from secrets import TODOIST_TOKEN, INBOX_PROJECT_ID, RULES
@@ -13,6 +15,7 @@ request_url += '&token=' + TODOIST_TOKEN
 inbox_items = requests.get(request_url).json()
 
 for inbox_item in inbox_items:
+    item = api.items.get_by_id(inbox_item['id'])
     for rule in RULES["due_time_by_prefix"]:
         prefix = rule[0]
         hour = rule[1]
@@ -39,7 +42,6 @@ for inbox_item in inbox_items:
                 date_string = arw.format('MM/DD/YYYY @ HH:mm')
                 due_date_utc = arw.to('utc').format('YYYY-MM-DDTHH:mm')
                 
-                item = api.items.get_by_id(inbox_item['id'])
                 item.update(date_string=date_string, due_date_utc=due_date_utc)
             except:
                 print 'Failed on "%s"' % inbox_item['content']
@@ -48,7 +50,9 @@ for inbox_item in inbox_items:
         prefix = rule[0]
         project_id = rule[1]
         if prefix in inbox_item['content']:
-            item = api.items.get_by_id(inbox_item['id'])
             item.move(project_id)
+
+    if RULES["titlecase"]:
+        item.update(content=titlecase(inbox_item['content']))
 
 api.commit()
