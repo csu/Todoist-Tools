@@ -44,13 +44,6 @@ for inbox_item in inbox_items:
             except:
                 print 'Failed on "%s"' % inbox_item['content']
 
-    for rule in RULES["project_by_prefix"]:
-        prefix = rule[0]
-        project_id = rule[1]
-        if inbox_item['content'].startswith(prefix):
-            item = api.items.get_by_id(inbox_item['id'])
-            item.move(project_id)
-
     for rule in RULES["project_by_substring"]:
         prefix = rule[0]
         project_id = rule[1]
