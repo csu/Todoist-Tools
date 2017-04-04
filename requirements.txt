@@ -1,7 +1,0 @@
-arrow==0.7.0
-python-dateutil==2.4.2
-requests==2.8.0
-six==1.10.0
-titlecase==0.7.2
--e git+git@github.com:Doist/todoist-python.git@838d83df29b905110f8bd317e08eaaa64e97f402#egg=todoist_python-master
-wheel==0.24.0
